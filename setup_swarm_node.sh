@@ -102,7 +102,7 @@ check_and_install_packages "curl"
 if ! is_command_installed "docker-compose"; then
     DOCKER_COMPOSE_VERSION="v2.25.0"
     echo "Installing Docker Compose v$DOCKER_COMPOSE_VERSION..."
-    curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || handle_error "Failed to install Docker Compose" $LINENO
+    curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose || handle_error "Failed to install Docker Compose" $LINENO
     chmod +x /usr/local/bin/docker-compose
 else
     echo "Docker Compose is already installed."
