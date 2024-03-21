@@ -55,7 +55,7 @@ check_and_install_packages() {
         # 更新软件包列表
         echo "Updating package lists..."
         # $PACKAGE_MANAGER update || handle_error "Failed to update package lists" $LINENO
-        IS_UPDATED=true
+        $IS_UPDATED=true
     fi
     local PACKAGES=("$@")
     echo "Checking and installing packages: ${PACKAGES[*]}..."
