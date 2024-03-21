@@ -129,6 +129,9 @@ else
     handle_error "Firewall management tool not found." $LINENO
 fi
 
+# 启动docker服务
+systemctl docker start
+
 # 加入 Docker Swarm 网络
 echo "Joining Docker Swarm network..."
 docker swarm join --token $NODE_ID $DOCKER_SWARM_IP:2377 || handle_error "Failed to join Docker Swarm network" $LINENO
