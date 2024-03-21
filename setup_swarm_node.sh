@@ -76,6 +76,9 @@ DOCKER_PACKAGES=(
 
 PACKAGE="docker"
 
+# 安装 curl
+check_and_install_packages "curl"
+
 # 安装 Docker
 if ! is_command_installed "$PACKAGE"; then
     echo "Installing Docker..."
@@ -94,9 +97,6 @@ if ! is_command_installed "$PACKAGE"; then
 else
     echo "$PACKAGE is already installed."
 fi
-
-# 安装 curl
-check_and_install_packages "curl"
 
 # 检查 Docker Compose 是否已安装
 # if ! is_command_installed "docker-compose"; then
