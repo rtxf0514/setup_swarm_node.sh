@@ -45,14 +45,18 @@ detect_package_manager() {
         handle_error "Unsupported package manager" $LINENO
     fi
 }
+
 PACKAGE_MANAGER=$(detect_package_manager)
 
-# 更新软件包列表
-# echo "Updating package lists..."
-# $PACKAGE_MANAGER update || handle_error "Failed to update package lists" $LINENO
-
+IS_UPDATED=false
 # 检查并安装包函数
 check_and_install_packages() {
+    if IS_UPDATED ; then
+        # 更新软件包列表
+        echo "Updating package lists..."
+        # $PACKAGE_MANAGER update || handle_error "Failed to update package lists" $LINENO
+        IS_UPDATED=true
+    fi
     local PACKAGES=("$@")
     echo "Checking and installing packages: ${PACKAGES[*]}..."
     for PACKAGE in "${PACKAGES[@]}"; do
@@ -74,10 +78,10 @@ DOCKER_PACKAGES=(
     "docker-compose-plugin"
 )
 
-PACKAGE="docker"
-
 # 安装 curl
 check_and_install_packages "curl"
+
+PACKAGE="docker"
 
 # 安装 Docker
 if ! is_command_installed "$PACKAGE"; then
