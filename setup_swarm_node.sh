@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 错误处理函数
 handle_error() {
