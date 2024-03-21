@@ -78,6 +78,10 @@ DOCKER_PACKAGES=(
 echo "Installing Docker..."
 curl -fsSL https://get.docker.com | bash || (
     echo "Failed to install Docker using get.docker.com. Trying alternative method..."
+    if is_command_installed "apt-get"; then
+        yum install -y yum-utils || handle_error "Failed to install yum-utils" $LINENO
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || handle_error "Failed to add Docker CE repository" $LINENO
+    fi
     check_and_install_packages "${DOCKER_PACKAGES[@]}"
 )
 
