@@ -51,7 +51,7 @@ PACKAGE_MANAGER=$(detect_package_manager)
 IS_UPDATED=false
 # 检查并安装包函数
 check_and_install_packages() {
-    if IS_UPDATED ; then
+    if $IS_UPDATED ; then
         # 更新软件包列表
         echo "Updating package lists..."
         # $PACKAGE_MANAGER update || handle_error "Failed to update package lists" $LINENO
