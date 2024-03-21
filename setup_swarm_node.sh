@@ -74,20 +74,26 @@ DOCKER_PACKAGES=(
     "docker-compose-plugin"
 )
 
+PACKAGE="docker"
+
 # 安装 Docker
-echo "Installing Docker..."
-curl -fsSL https://get.docker.com | bash || (
-    echo "Failed to install Docker using get.docker.com. Trying alternative method..."
-    if is_command_installed "apt-get"; then
-        yum install -y yum-utils || handle_error "Failed to install yum-utils" $LINENO
-        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || handle_error "Failed to add Docker CE repository" $LINENO
-        # 获取实际的 CentOS 版本号
-        RELEASEVER=$(rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release))
-        # 如果 CentOS 版本低于 7.0，则设置 releasever 为 7.0
-        sed -i "s/\$releasever/$RELEASEVER/g" /etc/yum.repos.d/docker-ce.repo || handle_error "Failed to replace releasever in Docker repo file" $LINENO
-    fi
-    check_and_install_packages "${DOCKER_PACKAGES[@]}"
-)
+if ! is_command_installed "$PACKAGE"; then
+    echo "Installing Docker..."
+    curl -fsSL https://get.docker.com | bash || (
+        echo "Failed to install Docker using get.docker.com. Trying alternative method..."
+        if is_command_installed "apt-get"; then
+            yum install -y yum-utils || handle_error "Failed to install yum-utils" $LINENO
+            yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || handle_error "Failed to add Docker CE repository" $LINENO
+            # 获取实际的 CentOS 版本号
+            RELEASEVER=$(rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release))
+            # 如果 CentOS 版本低于 7.0，则设置 releasever 为 7.0
+            sed -i "s/\$releasever/$RELEASEVER/g" /etc/yum.repos.d/docker-ce.repo || handle_error "Failed to replace releasever in Docker repo file" $LINENO
+        fi
+        check_and_install_packages "${DOCKER_PACKAGES[@]}"
+    )
+else
+    echo "$PACKAGE is already installed."
+fi
 
 # 安装 curl
 check_and_install_packages "curl"
