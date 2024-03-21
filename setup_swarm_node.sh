@@ -83,12 +83,8 @@ curl -fsSL https://get.docker.com | bash || (
         yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || handle_error "Failed to add Docker CE repository" $LINENO
         # 获取实际的 CentOS 版本号
         RELEASEVER=$(rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release))
-        
         # 如果 CentOS 版本低于 7.0，则设置 releasever 为 7.0
-        if [ "$(echo "${RELEASEVER%%.*} < 7" | bc)" -eq 1 ]; then
-            echo "Setting CentOS releasever to 7.0"
-            sudo sed -i "s/\$releasever/$RELEASEVER/g" /etc/yum.repos.d/docker-ce.repo || handle_error "Failed to replace releasever in Docker repo file" $LINENO
-        fi
+        sed -i "s/\$releasever/$RELEASEVER/g" /etc/yum.repos.d/docker-ce.repo || handle_error "Failed to replace releasever in Docker repo file" $LINENO
     fi
     check_and_install_packages "${DOCKER_PACKAGES[@]}"
 )
