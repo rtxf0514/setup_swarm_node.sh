@@ -85,7 +85,7 @@ curl -fsSL https://get.docker.com | bash || (
         RELEASEVER=$(rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release))
         
         # 如果 CentOS 版本低于 7.0，则设置 releasever 为 7.0
-        if [ "${RELEASEVER%%.*}" -lt "7" ]; then
+        if [ "$(echo "${RELEASEVER%%.*} < 7" | bc)" -eq 1 ]; then
             echo "Setting CentOS releasever to 7.0"
             sudo sed -i "s/\$releasever/$RELEASEVER/g" /etc/yum.repos.d/docker-ce.repo || handle_error "Failed to replace releasever in Docker repo file" $LINENO
         fi
