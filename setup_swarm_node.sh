@@ -110,7 +110,7 @@ check_and_install_packages "ufw"
 
 # 加入 Docker Swarm 网络
 echo "Joining Docker Swarm network..."
-docker swarm join --token $NODE_ID $DOCKER_SWARM_IP:2377 || handle_error "Failed to join Docker Swarm network" $LINENO
+#docker swarm join --token $NODE_ID $DOCKER_SWARM_IP:2377 || handle_error "Failed to join Docker Swarm network" $LINENO
 
 # 关闭防火墙
 echo "Disabling firewall..."
