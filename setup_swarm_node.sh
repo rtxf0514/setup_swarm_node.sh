@@ -8,7 +8,7 @@ handle_error() {
     local EXTERNAL_IP=$(curl -s ifconfig.me || echo "0.0.0.0")
     local NODE_NAME=$(hostname)
     echo "Error occurred on line $LINE_NUMBER: $ERROR_MSG. Sending error details..."
-    curl -X POST -d "internal_ip=$INTERNAL_IP&external_ip=$EXTERNAL_IP&node_name=$NODE_NAME&error_message=$ERROR_MSG&line_number=$LINE_NUMBER" https://example.com/error-handler
+    # curl -X POST -d "internal_ip=$INTERNAL_IP&external_ip=$EXTERNAL_IP&node_name=$NODE_NAME&error_message=$ERROR_MSG&line_number=$LINE_NUMBER" https://example.com/error-handler
     exit 1
 }
 
