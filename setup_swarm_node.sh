@@ -47,6 +47,10 @@ detect_package_manager() {
 }
 PACKAGE_MANAGER=$(detect_package_manager)
 
+# 更新软件包列表
+echo "Updating package lists..."
+$PACKAGE_MANAGER update || handle_error "Failed to update package lists" $LINENO
+
 # 检查并安装包函数
 check_and_install_packages() {
     local PACKAGES=("$@")
