@@ -99,14 +99,14 @@ fi
 check_and_install_packages "curl"
 
 # 检查 Docker Compose 是否已安装
-if ! is_command_installed "docker-compose"; then
-    DOCKER_COMPOSE_VERSION="v2.25.0"
-    echo "Installing Docker Compose v$DOCKER_COMPOSE_VERSION..."
-    curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)" -o /usr/local/bin/docker-compose || handle_error "Failed to install Docker Compose" $LINENO
-    chmod +x /usr/local/bin/docker-compose
-else
-    echo "Docker Compose is already installed."
-fi
+# if ! is_command_installed "docker-compose"; then
+#     DOCKER_COMPOSE_VERSION="v2.25.0"
+#     echo "Installing Docker Compose v$DOCKER_COMPOSE_VERSION..."
+#     curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)" -o /usr/local/bin/docker-compose || handle_error "Failed to install Docker Compose" $LINENO
+#     chmod +x /usr/local/bin/docker-compose
+# else
+#     echo "Docker Compose is already installed."
+# fi
 
 # 安装 NFS 客户端
 check_and_install_packages "nfs-utils"
