@@ -131,7 +131,7 @@ fi
 
 # 启动docker服务
 echo "Start docker service."
-systemctl docker start || handle_error "Failed to start docker service" $LINENO
+systemctl start docker || handle_error "Failed to start docker service" $LINENO
 
 # 加入 Docker Swarm 网络
 echo "Joining Docker Swarm network..."
