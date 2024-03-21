@@ -35,14 +35,6 @@ DOCKER_SWARM_IP=$3
 echo "Setting node name to $NODE_NAME"
 hostnamectl set-hostname $NODE_NAME
 
-# 检查 Docker 是否已安装
-if ! is_command_installed "docker"; then
-    echo "Docker is not installed. Installing..."
-    curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun || handle_error "Failed to install Docker" $LINENO
-else
-    echo "Docker is already installed."
-fi
-
 # 获取包管理器
 detect_package_manager() {
     if is_command_installed yum; then
@@ -56,20 +48,37 @@ detect_package_manager() {
 PACKAGE_MANAGER=$(detect_package_manager)
 
 # 检查并安装包函数
-check_and_install_package() {
-    local PACKAGE_NAME="$1"
-    local PACKAGE_MANAGER="$2"
-    echo "Checking and installing $PACKAGE_NAME..."
-    if ! is_command_installed "$PACKAGE_NAME"; then
-        echo "$PACKAGE_NAME is not installed. Installing..."
-        $PACKAGE_MANAGER install -y $PACKAGE_NAME || handle_error "Failed to install $PACKAGE_NAME" $LINENO
-    else
-        echo "$PACKAGE_NAME is already installed."
-    fi
+check_and_install_packages() {
+    local PACKAGES=("$@")
+    echo "Checking and installing packages: ${PACKAGES[*]}..."
+    for PACKAGE in "${PACKAGES[@]}"; do
+        if ! is_command_installed "$PACKAGE"; then
+            echo "$PACKAGE is not installed. Installing..."
+            $PACKAGE_MANAGER install -y $PACKAGE || handle_error "Failed to install $PACKAGE" $LINENO
+        else
+            echo "$PACKAGE is already installed."
+        fi
+    done
 }
 
+# 安装 Docker 相关软件包
+DOCKER_PACKAGES=(
+    "docker-ce"
+    "docker-ce-cli"
+    "containerd.io"
+    "docker-buildx-plugin"
+    "docker-compose-plugin"
+)
+
+# 安装 Docker
+echo "Installing Docker..."
+curl -fsSL https://get.docker.com | bash || (
+    echo "Failed to install Docker using get.docker.com. Trying alternative method..."
+    check_and_install_packages "${DOCKER_PACKAGES[@]}"
+)
+
 # 安装 curl
-check_and_install_package "curl" "$PACKAGE_MANAGER"
+check_and_install_packages "curl"
 
 # 检查 Docker Compose 是否已安装
 if ! is_command_installed "docker-compose"; then
@@ -82,10 +91,10 @@ else
 fi
 
 # 安装 NFS 客户端
-check_and_install_package "nfs-utils" "$PACKAGE_MANAGER"
+check_and_install_packages "nfs-utils"
 
 # 安装 ufw 防火墙管理工具
-check_and_install_package "ufw" "$PACKAGE_MANAGER"
+check_and_install_packages "ufw"
 
 # 加入 Docker Swarm 网络
 echo "Joining Docker Swarm network..."
