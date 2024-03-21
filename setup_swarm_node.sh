@@ -114,10 +114,6 @@ check_and_install_packages "nfs-utils"
 # 安装 ufw 防火墙管理工具
 check_and_install_packages "ufw"
 
-# 加入 Docker Swarm 网络
-echo "Joining Docker Swarm network..."
-#docker swarm join --token $NODE_ID $DOCKER_SWARM_IP:2377 || handle_error "Failed to join Docker Swarm network" $LINENO
-
 # 关闭防火墙
 echo "Disabling firewall..."
 if is_command_installed "firewalld"; then
@@ -128,5 +124,9 @@ elif is_command_installed "ufw"; then
 else
     handle_error "Firewall management tool not found." $LINENO
 fi
+
+# 加入 Docker Swarm 网络
+echo "Joining Docker Swarm network..."
+docker swarm join --token $NODE_ID $DOCKER_SWARM_IP:2377 || handle_error "Failed to join Docker Swarm network" $LINENO
 
 echo "Setup complete."
