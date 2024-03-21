@@ -23,12 +23,12 @@ is_command_installed() {
 
 # 检查参数是否提供正确
 if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <node_id> <node_name> <docker_swarm_ip>"
+    echo "Usage: $0 <name> <token> <ip>"
     exit 1
 fi
 
-NODE_ID=$1
-NODE_NAME=$2
+NODE_ID=$2
+NODE_NAME=$1
 DOCKER_SWARM_IP=$3
 
 # 设置节点名称
